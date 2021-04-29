@@ -39,14 +39,6 @@ func generateLongObject() []byte {
 	return buff.Bytes()
 }
 
-type object struct {
-	Int    int       `json:"int"`
-	Float  float64   `json:"float"`
-	String string    `json:"string"`
-	Object *object   `json:"object,omitempty"`
-	Array  []*object `json:"array,omitempty"`
-}
-
 func Benchmark_Unmarshal_GoStdJsonStruct(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		o := object{}
@@ -115,11 +107,24 @@ func Benchmark__Marshal__JsoniterStruct(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		_, err := json.Marshal(&o)
-		if err != nil {
-			b.Errorf("marshal error: %v", err)
-			return
-		}
+		json.Marshal(&o)
+	}
+}
+
+func Benchmark_Unmarshal_EasyjsonStruct(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		o := object{}
+		o.UnmarshalJSON(unmarshalText)
+	}
+}
+
+func Benchmark__Marshal__EasyjsonStruct(b *testing.B) {
+	o := object{}
+	o.UnmarshalJSON(unmarshalText)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		o.MarshalJSON()
 	}
 }
 
