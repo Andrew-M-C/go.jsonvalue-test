@@ -3,6 +3,7 @@ package benchmark
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"strconv"
 	"testing"
 
@@ -13,7 +14,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-// go test -bench=. -run=none -benchmem -benchtime=10s
+// go test -bench=. -run=none -benchmem -benchtime=2s
 
 var unmarshalText = []byte(`{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!"},"array":[{"int":123456,"float":123.456789,"string":"Hello, world!"},{"int":123456,"float":123.456789,"string":"Hello, world!"}]}}},"array":[{"int":123456,"float":123.456789,"string":"Hello, world!"},{"int":123456,"float":123.456789,"string":"Hello, world!"}]}`)
 var jsonit = jsoniter.ConfigCompatibleWithStandardLibrary
@@ -37,6 +38,11 @@ func generateLongObject() []byte {
 	buff.WriteRune(('}'))
 
 	return buff.Bytes()
+}
+
+func init() {
+	largeText := generateLongObject()
+	fmt.Println(string(largeText))
 }
 
 func Benchmark_Unmarshal_GoStdJsonStruct(b *testing.B) {
@@ -168,6 +174,54 @@ func Benchmark____Get____Jsoniter(b *testing.B) {
 	}
 }
 
+func Benchmark____Get____Jsoniter_Full(b *testing.B) {
+	raw := unmarshalText
+	var handleArray func(jsoniter.Any)
+	var handleObject func(jsoniter.Any)
+
+	handleArray = func(any jsoniter.Any) {
+		le := any.Size()
+		for i := 0; i < le; i++ {
+			sub := any.Get(i)
+			switch sub.ValueType() {
+			default:
+			// basic type do nothing
+			case jsoniter.ArrayValue:
+				handleArray(sub)
+			case jsoniter.ObjectValue:
+				handleObject(sub)
+			}
+		}
+	}
+
+	handleObject = func(any jsoniter.Any) {
+		keys := any.Keys()
+		for _, k := range keys {
+			sub := any.Get(k)
+			switch sub.ValueType() {
+			default:
+			// basic type do nothing
+			case jsoniter.ArrayValue:
+				handleArray(sub)
+			case jsoniter.ObjectValue:
+				handleObject(sub)
+			}
+		}
+	}
+
+	for i := 0; i < b.N; i++ {
+		any := jsoniter.Get(raw)
+		switch any.ValueType() {
+		default:
+			// basic type do nothing
+		case jsoniter.ArrayValue:
+			handleArray(any)
+		case jsoniter.ObjectValue:
+			handleObject(any)
+		}
+	}
+}
+
 func Benchmark____Get____Jsoniter_AndGetParsedValue(b *testing.B) {
 	raw := unmarshalText
 	any := jsoniter.Get(raw)
@@ -194,24 +248,24 @@ func Benchmark____Get____Jsoniter_ReadLevelOne(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		any := jsoniter.Get(raw)
-		keys := any.Keys()
-		for _, k := range keys {
-			any.Get(k)
-		}
+		any.Keys()
+		// keys := any.Keys()
+		// for _, k := range keys {
+		// 	any.Get(k)
+		// }
 	}
 }
 
-func Benchmark____Get____Jsoniter_blob_ReadOneChain(b *testing.B) {
+func Benchmark____Get____Jsoniter_ReadOneChain_Blob(b *testing.B) {
 	raw := generateLongObject()
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		any := jsoniter.Get(raw)
-		any.Get("object", "object", "object", "array", 1)
+		jsoniter.Get(raw, "10", "object", "object", "object", "array", 1)
 	}
 }
 
-func Benchmark_Unmarshal_Jsonparser_Full_Blob(b *testing.B) {
+func Benchmark_Unmarshal_Jsonparser_Full(b *testing.B) {
 	var objEach func([]byte, []byte, jsonparser.ValueType, int) error
 	var arrEach func([]byte, jsonparser.ValueType, int, error)
 
@@ -227,7 +281,7 @@ func Benchmark_Unmarshal_Jsonparser_Full_Blob(b *testing.B) {
 		return
 	}
 
-	raw := generateLongObject()
+	raw := unmarshalText
 	b.ResetTimer()
 
 	arrEach = func(v []byte, t jsonparser.ValueType, _ int, _ error) {
@@ -244,6 +298,18 @@ func Benchmark_Unmarshal_Jsonparser_Full_Blob(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		jsonparser.ObjectEach(raw, objEach)
+	}
+}
+
+func Benchmark_Unmarshal_Jsonparser_ReadLevelOne(b *testing.B) {
+	objEach := func(k, v []byte, t jsonparser.ValueType, _ int) (noErr error) {
+		return
+	}
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		jsonparser.ObjectEach(unmarshalText, objEach)
 	}
 }
 
@@ -266,6 +332,15 @@ func Benchmark_Unmarshal_Jsonparser_ReadOneChain(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		jsonparser.Get(raw, "object", "object", "object", "array", "[1]")
+	}
+}
+
+func Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob(b *testing.B) {
+	raw := generateLongObject()
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		jsonparser.Get(raw, "10", "object", "object", "object", "array", "[1]")
 	}
 }
 
@@ -295,6 +370,14 @@ func Benchmark_Unmarshal_Jsonvalue_ReadOneChain(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		v, _ := jsonvalue.Unmarshal(origB)
 		v.Get("object", "object", "object", "array", 1)
+	}
+}
+
+func Benchmark_Unmarshal_Jsonvalue_ReadOneChain_Blob(b *testing.B) {
+	origB := generateLongObject()
+	for i := 0; i < b.N; i++ {
+		v, _ := jsonvalue.Unmarshal(origB)
+		v.Get("50", "object", "object", "object", "array", 1)
 	}
 }
 
