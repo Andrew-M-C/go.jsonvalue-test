@@ -3,8 +3,10 @@ github.com/Andrew-M-C/go.jsonvalue v1.0.3 h1:Dz92BV0gFEDj0zOEg+jD53HU91sWZHxodqc
 github.com/Andrew-M-C/go.jsonvalue v1.0.3/go.mod h1:za9JxJw+8FZV0LVT+LVAjJNQKVEYm+BzkcO16RF+0Zs=
 github.com/Andrew-M-C/go.jsonvalue v1.0.5 h1:ee4zMZxOcrNej2jLaYDOK9ZA6MNChshig2Px70jGvco=
 github.com/Andrew-M-C/go.jsonvalue v1.0.5/go.mod h1:za9JxJw+8FZV0LVT+LVAjJNQKVEYm+BzkcO16RF+0Zs=
-github.com/Andrew-M-C/go.jsonvalue v1.0.6-0.20210506011710-9555c9779bb2 h1:z9bmFm3vckaxPOdYKRLsOlkdiCCX53zkNHiUVeWMDRw=
-github.com/Andrew-M-C/go.jsonvalue v1.0.6-0.20210506011710-9555c9779bb2/go.mod h1:EOK7/BLd+rNb928lxQhLz29AS2871LMM0cpPVo+irU4=
+github.com/Andrew-M-C/go.jsonvalue v1.1.0-beta h1:IZOdFC1BgthnQDHT0fBoBqDdP1c5XCS0hbVhyaj3TDE=
+github.com/Andrew-M-C/go.jsonvalue v1.1.0-beta/go.mod h1:EOK7/BLd+rNb928lxQhLz29AS2871LMM0cpPVo+irU4=
+github.com/Andrew-M-C/go.jsonvalue v1.1.0 h1:PAfmae4aWWPoQuuNoITTDXdMOD8bBs1n/bVZJvTcuKM=
+github.com/Andrew-M-C/go.jsonvalue v1.1.0/go.mod h1:EOK7/BLd+rNb928lxQhLz29AS2871LMM0cpPVo+irU4=
 github.com/Andrew-M-C/go.util v0.0.0-20210428032903-565261b21288 h1:YpC10HEcQ2kAN0hHpsCKEz9x/gtWC4AuX9pQGhCWk3k=
 github.com/Andrew-M-C/go.util v0.0.0-20210428032903-565261b21288/go.mod h1:tSFc/0omeMwkI/p1rceBeQ/qWJu6GPSfdIiMaa3I4Pw=
 github.com/buger/jsonparser v0.0.0-20181115193947-bf1c66bbce23/go.mod h1:bbYlZJ7hK1yFx9hf58LP0zeX7UjIGs20ufpu3evjr+s=
