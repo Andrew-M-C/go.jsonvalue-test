@@ -10,6 +10,7 @@ import (
 	jsonvalue "github.com/Andrew-M-C/go.jsonvalue"
 	jsonvalue103 "github.com/Andrew-M-C/go.jsonvalue103"
 	jsonvalue105 "github.com/Andrew-M-C/go.jsonvalue105"
+	jsonvalue111 "github.com/Andrew-M-C/go.jsonvalue111"
 	jsonparser "github.com/buger/jsonparser"
 	jsoniter "github.com/json-iterator/go"
 )
@@ -355,6 +356,13 @@ func Benchmark_Unmarshal_Jsonvalue_v1_0_4(b *testing.B) {
 	origB := unmarshalText
 	for i := 0; i < b.N; i++ {
 		jsonvalue105.Unmarshal(origB)
+	}
+}
+
+func Benchmark_Unmarshal_Jsonvalue_v1_1_1(b *testing.B) {
+	origB := unmarshalText
+	for i := 0; i < b.N; i++ {
+		jsonvalue111.Unmarshal(origB)
 	}
 }
 

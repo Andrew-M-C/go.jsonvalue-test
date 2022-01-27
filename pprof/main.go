@@ -9,6 +9,7 @@ import (
 	"time"
 
 	jsonvalue "github.com/Andrew-M-C/go.jsonvalue"
+	jsonvalue111 "github.com/Andrew-M-C/go.jsonvalue111"
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -22,6 +23,8 @@ const (
 )
 
 var (
+	unmarshalFloatText = []byte(`{"float":123.456789}`)
+
 	unmarshalText = []byte(`{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!"},"array":[{"int":123456,"float":123.456789,"string":"Hello, world!"},{"int":123456,"float":123.456789,"string":"Hello, world!"}]}}},"array":[{"int":123456,"float":123.456789,"string":"Hello, world!"},{"int":123456,"float":123.456789,"string":"Hello, world!"}]}`)
 	printf        = log.Printf
 )
@@ -35,13 +38,75 @@ func jsonvalueUnmarshalTraceTest() {
 	trace.Start(ft)
 	defer trace.Stop()
 
-	_, err = jsonvalue.Unmarshal(unmarshalText)
-	if err != nil {
-		printf("unmarshal error: %v", err)
-		return
+	for i := 0; i < iteration; i++ {
+		_, err = jsonvalue.Unmarshal(unmarshalText)
+		if err != nil {
+			printf("unmarshal error: %v", err)
+			return
+		}
 	}
 
 	printf("jsonvalue unmarshal trace done")
+}
+
+func jsonvalue111UnmarshalTest() {
+	f, err := os.OpenFile("jsonvalue-unmarshal-v111.profile", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+	pprof.StartCPUProfile(f)
+	defer pprof.StopCPUProfile()
+
+	for i := 0; i < iteration; i++ {
+		_, err := jsonvalue111.Unmarshal(unmarshalText)
+		if err != nil {
+			printf("unmarshal error: %v", err)
+			return
+		}
+	}
+
+	printf("jsonvalue@v1.1.1 unmarshal done")
+}
+
+func jsonvalue111UnmarshalFloatTest() {
+	f, err := os.OpenFile("jsonvalue-unmarshal-float-v111.profile", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+	pprof.StartCPUProfile(f)
+	defer pprof.StopCPUProfile()
+
+	for i := 0; i < iteration*10; i++ {
+		_, err := jsonvalue111.Unmarshal(unmarshalFloatText)
+		if err != nil {
+			printf("unmarshal error: %v", err)
+			return
+		}
+	}
+
+	printf("jsonvalue@v1.1.1 unmarshal float done")
+}
+
+func jsonvalueUnmarshalFloatTest() {
+	f, err := os.OpenFile("jsonvalue-unmarshal-float.profile", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+	pprof.StartCPUProfile(f)
+	defer pprof.StopCPUProfile()
+
+	for i := 0; i < iteration*10; i++ {
+		_, err := jsonvalue.Unmarshal(unmarshalFloatText)
+		if err != nil {
+			printf("unmarshal error: %v", err)
+			return
+		}
+	}
+
+	printf("jsonvalue unmarshal float done")
 }
 
 func jsonvalueUnmarshalTest() {
@@ -61,6 +126,7 @@ func jsonvalueUnmarshalTest() {
 		}
 	}
 
+	printf("jsonvalue unmarshal done")
 }
 
 func jsonvalueMarshalTest() {
@@ -270,8 +336,12 @@ func main() {
 
 	run(jsonvalueUnmarshalTraceTest)
 
+	run(jsonvalue111UnmarshalTest)
 	run(jsonvalueUnmarshalTest)
 	run(jsonvalueMarshalTest)
+
+	run(jsonvalue111UnmarshalFloatTest)
+	run(jsonvalueUnmarshalFloatTest)
 
 	run(mapInterfaceUnmarshalTest)
 	run(mapInterfaceMarshalTest)
