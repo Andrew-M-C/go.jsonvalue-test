@@ -10,6 +10,7 @@ import (
 
 	jsonvalue "github.com/Andrew-M-C/go.jsonvalue"
 	jsonvalue111 "github.com/Andrew-M-C/go.jsonvalue111"
+	jsonvalue121 "github.com/Andrew-M-C/go.jsonvalue121"
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -69,6 +70,26 @@ func jsonvalue111UnmarshalTest() {
 	printf("jsonvalue@v1.1.1 unmarshal done")
 }
 
+func jsonvalue121UnmarshalTest() {
+	f, err := os.OpenFile("jsonvalue-unmarshal-v121.profile", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+	pprof.StartCPUProfile(f)
+	defer pprof.StopCPUProfile()
+
+	for i := 0; i < iteration; i++ {
+		_, err := jsonvalue121.Unmarshal(unmarshalText)
+		if err != nil {
+			printf("unmarshal error: %v", err)
+			return
+		}
+	}
+
+	printf("jsonvalue@v1.2.1 unmarshal done")
+}
+
 func jsonvalue111UnmarshalFloatTest() {
 	f, err := os.OpenFile("jsonvalue-unmarshal-float-v111.profile", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
 	if err != nil {
@@ -87,6 +108,26 @@ func jsonvalue111UnmarshalFloatTest() {
 	}
 
 	printf("jsonvalue@v1.1.1 unmarshal float done")
+}
+
+func jsonvalue121UnmarshalFloatTest() {
+	f, err := os.OpenFile("jsonvalue-unmarshal-float-v121.profile", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+	pprof.StartCPUProfile(f)
+	defer pprof.StopCPUProfile()
+
+	for i := 0; i < iteration*10; i++ {
+		_, err := jsonvalue121.Unmarshal(unmarshalFloatText)
+		if err != nil {
+			printf("unmarshal error: %v", err)
+			return
+		}
+	}
+
+	printf("jsonvalue@v1.2.1 unmarshal float done")
 }
 
 func jsonvalueUnmarshalFloatTest() {
@@ -338,10 +379,13 @@ func main() {
 
 	run(jsonvalue111UnmarshalTest)
 	run(jsonvalueUnmarshalTest)
+	run(jsonvalue121UnmarshalTest)
+
 	run(jsonvalueMarshalTest)
 
 	run(jsonvalue111UnmarshalFloatTest)
 	run(jsonvalueUnmarshalFloatTest)
+	run(jsonvalue121UnmarshalFloatTest)
 
 	run(mapInterfaceUnmarshalTest)
 	run(mapInterfaceMarshalTest)

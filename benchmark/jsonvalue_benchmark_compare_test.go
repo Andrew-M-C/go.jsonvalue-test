@@ -11,11 +11,13 @@ import (
 	jsonvalue103 "github.com/Andrew-M-C/go.jsonvalue103"
 	jsonvalue105 "github.com/Andrew-M-C/go.jsonvalue105"
 	jsonvalue111 "github.com/Andrew-M-C/go.jsonvalue111"
+	jsonvalue121 "github.com/Andrew-M-C/go.jsonvalue121"
 	jsonparser "github.com/buger/jsonparser"
+	sonic "github.com/bytedance/sonic"
 	jsoniter "github.com/json-iterator/go"
 )
 
-// go test -bench=. -run=none -benchmem -benchtime=2s
+// go test -bench=. -run=none -benchmem -benchtime=1s
 
 var unmarshalText = []byte(`{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!"},"array":[{"int":123456,"float":123.456789,"string":"Hello, world!"},{"int":123456,"float":123.456789,"string":"Hello, world!"}]}}},"array":[{"int":123456,"float":123.456789,"string":"Hello, world!"},{"int":123456,"float":123.456789,"string":"Hello, world!"}]}`)
 var jsonit = jsoniter.ConfigCompatibleWithStandardLibrary
@@ -46,14 +48,14 @@ func init() {
 	fmt.Println(string(largeText))
 }
 
-func Benchmark_Unmarshal_GoStdJsonStruct(b *testing.B) {
+func Benchmark_Unmarshal_GoStdJson_Struct(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		o := object{}
 		json.Unmarshal(unmarshalText, &o)
 	}
 }
 
-func Benchmark__Marshal__GoStdJsonStruct(b *testing.B) {
+func Benchmark__Marshal__GoStdJson_Struct(b *testing.B) {
 	o := object{}
 	json.Unmarshal(unmarshalText, &o)
 	b.ResetTimer()
@@ -67,7 +69,7 @@ func Benchmark__Marshal__GoStdJsonStruct(b *testing.B) {
 	}
 }
 
-func Benchmark_Unmarshal_GoStdJsonMapItf_blob(b *testing.B) {
+func Benchmark_Unmarshal_GoStdJson_MapItf_blob(b *testing.B) {
 	raw := generateLongObject()
 	b.ResetTimer()
 
@@ -77,7 +79,7 @@ func Benchmark_Unmarshal_GoStdJsonMapItf_blob(b *testing.B) {
 	}
 }
 
-func Benchmark_Unmarshal_GoStdJsonMapItf(b *testing.B) {
+func Benchmark_Unmarshal_GoStdJson_MapItf(b *testing.B) {
 	raw := unmarshalText
 	b.ResetTimer()
 
@@ -87,7 +89,7 @@ func Benchmark_Unmarshal_GoStdJsonMapItf(b *testing.B) {
 	}
 }
 
-func Benchmark__Marshal__GoStdJsonMapItf(b *testing.B) {
+func Benchmark__Marshal__GoStdJson_MapItf(b *testing.B) {
 	m := map[string]interface{}{}
 	json.Unmarshal(unmarshalText, &m)
 	b.ResetTimer()
@@ -101,14 +103,69 @@ func Benchmark__Marshal__GoStdJsonMapItf(b *testing.B) {
 	}
 }
 
-func Benchmark_Unmarshal_JsoniterStruct(b *testing.B) {
+func Benchmark_Unmarshal_Sonic_Struct(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		o := object{}
+		sonic.Unmarshal(unmarshalText, &o)
+	}
+}
+
+func Benchmark__Marshal__Sonic_Struct(b *testing.B) {
+	o := object{}
+	json.Unmarshal(unmarshalText, &o)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_, err := sonic.Marshal(&o)
+		if err != nil {
+			b.Errorf("marshal error: %v", err)
+			return
+		}
+	}
+}
+
+func Benchmark_Unmarshal_Sonic_MapItf_blob(b *testing.B) {
+	raw := generateLongObject()
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		m := map[string]interface{}{}
+		sonic.Unmarshal(raw, &m)
+	}
+}
+
+func Benchmark_Unmarshal_Sonic_MapItf(b *testing.B) {
+	raw := unmarshalText
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		m := map[string]interface{}{}
+		sonic.Unmarshal(raw, &m)
+	}
+}
+
+func Benchmark__Marshal__Sonic_MapItf(b *testing.B) {
+	m := map[string]interface{}{}
+	json.Unmarshal(unmarshalText, &m)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_, err := sonic.Marshal(&m)
+		if err != nil {
+			b.Errorf("marshal error: %v", err)
+			return
+		}
+	}
+}
+
+func Benchmark_Unmarshal_Jsoniter_Struct(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		o := object{}
 		jsonit.Unmarshal(unmarshalText, &o)
 	}
 }
 
-func Benchmark__Marshal__JsoniterStruct(b *testing.B) {
+func Benchmark__Marshal__Jsoniter_Struct(b *testing.B) {
 	o := object{}
 	jsonit.Unmarshal(unmarshalText, &o)
 	b.ResetTimer()
@@ -118,24 +175,7 @@ func Benchmark__Marshal__JsoniterStruct(b *testing.B) {
 	}
 }
 
-func Benchmark_Unmarshal_EasyjsonStruct(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		o := object{}
-		o.UnmarshalJSON(unmarshalText)
-	}
-}
-
-func Benchmark__Marshal__EasyjsonStruct(b *testing.B) {
-	o := object{}
-	o.UnmarshalJSON(unmarshalText)
-	b.ResetTimer()
-
-	for i := 0; i < b.N; i++ {
-		o.MarshalJSON()
-	}
-}
-
-func Benchmark_Unmarshal_JsoniterMapItf_blob(b *testing.B) {
+func Benchmark_Unmarshal_Jsoniter_MapItf_blob(b *testing.B) {
 	raw := generateLongObject()
 	b.ResetTimer()
 
@@ -145,14 +185,14 @@ func Benchmark_Unmarshal_JsoniterMapItf_blob(b *testing.B) {
 	}
 }
 
-func Benchmark_Unmarshal_JsoniterMapItf(b *testing.B) {
+func Benchmark_Unmarshal_Jsoniter_MapItf(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		m := map[string]interface{}{}
 		jsonit.Unmarshal(unmarshalText, &m)
 	}
 }
 
-func Benchmark__Marshal__JsoniterMapItf(b *testing.B) {
+func Benchmark__Marshal__Jsoniter_MapItf(b *testing.B) {
 	m := map[string]interface{}{}
 	jsonit.Unmarshal(unmarshalText, &m)
 	b.ResetTimer()
@@ -266,6 +306,23 @@ func Benchmark____Get____Jsoniter_ReadOneChain_Blob(b *testing.B) {
 	}
 }
 
+func Benchmark_Unmarshal_Easyjson_Struct(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		o := object{}
+		o.UnmarshalJSON(unmarshalText)
+	}
+}
+
+func Benchmark__Marshal__Easyjson_Struct(b *testing.B) {
+	o := object{}
+	o.UnmarshalJSON(unmarshalText)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		o.MarshalJSON()
+	}
+}
+
 func Benchmark_Unmarshal_Jsonparser_Full(b *testing.B) {
 	var objEach func([]byte, []byte, jsonparser.ValueType, int) error
 	var arrEach func([]byte, jsonparser.ValueType, int, error)
@@ -373,6 +430,13 @@ func Benchmark_Unmarshal_Jsonvalue(b *testing.B) {
 	}
 }
 
+func Benchmark_Unmarshal_Jsonvalue_v1_2_1(b *testing.B) {
+	origB := unmarshalText
+	for i := 0; i < b.N; i++ {
+		jsonvalue121.Unmarshal(origB)
+	}
+}
+
 func Benchmark_Unmarshal_Jsonvalue_ReadOneChain(b *testing.B) {
 	origB := unmarshalText
 	for i := 0; i < b.N; i++ {
@@ -417,7 +481,7 @@ func Benchmark_Unmarshal_Jsonvalue_blob(b *testing.B) {
 	}
 }
 
-func Benchmark_Unmarshal_JsonvalueNoCopy(b *testing.B) {
+func Benchmark_Unmarshal_Jsonvalue_NoCopy(b *testing.B) {
 	// origB := unmarshalText
 	origB := generateLongObject()
 
