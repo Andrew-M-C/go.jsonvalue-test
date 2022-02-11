@@ -3,19 +3,20 @@ package benchmark
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"testing"
 
 	jsonvalue "github.com/Andrew-M-C/go.jsonvalue"
+	jsonvalue000 "github.com/Andrew-M-C/go.jsonvalue000"
 	jsonvalue103 "github.com/Andrew-M-C/go.jsonvalue103"
 	jsonvalue105 "github.com/Andrew-M-C/go.jsonvalue105"
 	jsonvalue111 "github.com/Andrew-M-C/go.jsonvalue111"
 	jsonparser "github.com/buger/jsonparser"
+	sonic "github.com/bytedance/sonic"
 	jsoniter "github.com/json-iterator/go"
 )
 
-// go test -bench=. -run=none -benchmem -benchtime=2s
+// go test -bench=. -run=none -benchmem -benchtime=1s
 
 var unmarshalText = []byte(`{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!"},"array":[{"int":123456,"float":123.456789,"string":"Hello, world!"},{"int":123456,"float":123.456789,"string":"Hello, world!"}]}}},"array":[{"int":123456,"float":123.456789,"string":"Hello, world!"},{"int":123456,"float":123.456789,"string":"Hello, world!"}]}`)
 var jsonit = jsoniter.ConfigCompatibleWithStandardLibrary
@@ -41,43 +42,40 @@ func generateLongObject() []byte {
 	return buff.Bytes()
 }
 
-func init() {
-	largeText := generateLongObject()
-	fmt.Println(string(largeText))
-}
+// func init() {
+// 	largeText := generateLongObject()
+// 	fmt.Println(string(largeText))
+// }
 
-func Benchmark_Unmarshal_GoStdJsonStruct(b *testing.B) {
+func Benchmark_Unmarshal_结构体_json(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		o := object{}
 		json.Unmarshal(unmarshalText, &o)
 	}
 }
 
-func Benchmark__Marshal__GoStdJsonStruct(b *testing.B) {
-	o := object{}
-	json.Unmarshal(unmarshalText, &o)
-	b.ResetTimer()
-
+func Benchmark_Unmarshal_结构体_sonic(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		_, err := json.Marshal(&o)
-		if err != nil {
-			b.Errorf("marshal error: %v", err)
-			return
-		}
+		o := object{}
+		sonic.Unmarshal(unmarshalText, &o)
 	}
 }
 
-func Benchmark_Unmarshal_GoStdJsonMapItf_blob(b *testing.B) {
-	raw := generateLongObject()
-	b.ResetTimer()
-
+func Benchmark_Unmarshal_结构体_easyjson(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		m := map[string]interface{}{}
-		json.Unmarshal(raw, &m)
+		o := object{}
+		o.UnmarshalJSON(unmarshalText)
 	}
 }
 
-func Benchmark_Unmarshal_GoStdJsonMapItf(b *testing.B) {
+func Benchmark_Unmarshal_结构体_jsoniter(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		o := object{}
+		jsonit.Unmarshal(unmarshalText, &o)
+	}
+}
+
+func Benchmark_Unmarshal_map_interface_json(b *testing.B) {
 	raw := unmarshalText
 	b.ResetTimer()
 
@@ -87,7 +85,99 @@ func Benchmark_Unmarshal_GoStdJsonMapItf(b *testing.B) {
 	}
 }
 
-func Benchmark__Marshal__GoStdJsonMapItf(b *testing.B) {
+func Benchmark_Unmarshal_map_interface_sonic(b *testing.B) {
+	raw := unmarshalText
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		m := map[string]interface{}{}
+		sonic.Unmarshal(raw, &m)
+	}
+}
+
+func Benchmark_Unmarshal_map_interface_jsoniter(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		m := map[string]interface{}{}
+		jsonit.Unmarshal(unmarshalText, &m)
+	}
+}
+
+func Benchmark_Unmarshal_map_interface_json_blob(b *testing.B) {
+	raw := generateLongObject()
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		m := map[string]interface{}{}
+		json.Unmarshal(raw, &m)
+	}
+}
+
+func Benchmark_Unmarshal_map_interface_jsoniter_blob(b *testing.B) {
+	raw := generateLongObject()
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		m := map[string]interface{}{}
+		jsonit.Unmarshal(raw, &m)
+	}
+}
+
+func Benchmark_Unmarshal_interface_json(b *testing.B) {
+	raw := unmarshalText
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		var m interface{}
+		json.Unmarshal(raw, &m)
+	}
+}
+
+func Benchmark_Unmarshal_interface_sonic(b *testing.B) {
+	raw := unmarshalText
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		var m interface{}
+		sonic.Unmarshal(raw, &m)
+	}
+}
+
+func Benchmark_Unmarshal_Jsonvalue_v1_0_3(b *testing.B) {
+	origB := unmarshalText
+	for i := 0; i < b.N; i++ {
+		jsonvalue103.Unmarshal(origB)
+	}
+}
+
+func Benchmark_Unmarshal_Jsonvalue_v1_0_4(b *testing.B) {
+	origB := unmarshalText
+	for i := 0; i < b.N; i++ {
+		jsonvalue105.Unmarshal(origB)
+	}
+}
+
+func Benchmark_Unmarshal_Jsonvalue_v1_1_1(b *testing.B) {
+	origB := unmarshalText
+	for i := 0; i < b.N; i++ {
+		jsonvalue111.Unmarshal(origB)
+	}
+}
+
+func Benchmark_Unmarshal_Jsonvalue(b *testing.B) {
+	origB := unmarshalText
+	for i := 0; i < b.N; i++ {
+		jsonvalue.Unmarshal(origB)
+	}
+}
+
+func Benchmark_Unmarshal_Jsonvalue_develop(b *testing.B) {
+	origB := unmarshalText
+	for i := 0; i < b.N; i++ {
+		jsonvalue000.Unmarshal(origB)
+	}
+}
+
+func Benchmark__Marshal__map_interface_json(b *testing.B) {
 	m := map[string]interface{}{}
 	json.Unmarshal(unmarshalText, &m)
 	b.ResetTimer()
@@ -101,14 +191,21 @@ func Benchmark__Marshal__GoStdJsonMapItf(b *testing.B) {
 	}
 }
 
-func Benchmark_Unmarshal_JsoniterStruct(b *testing.B) {
+func Benchmark__Marshal__结构体_json(b *testing.B) {
+	o := object{}
+	json.Unmarshal(unmarshalText, &o)
+	b.ResetTimer()
+
 	for i := 0; i < b.N; i++ {
-		o := object{}
-		jsonit.Unmarshal(unmarshalText, &o)
+		_, err := json.Marshal(&o)
+		if err != nil {
+			b.Errorf("marshal error: %v", err)
+			return
+		}
 	}
 }
 
-func Benchmark__Marshal__JsoniterStruct(b *testing.B) {
+func Benchmark__Marshal__结构体_jsoniter(b *testing.B) {
 	o := object{}
 	jsonit.Unmarshal(unmarshalText, &o)
 	b.ResetTimer()
@@ -118,14 +215,7 @@ func Benchmark__Marshal__JsoniterStruct(b *testing.B) {
 	}
 }
 
-func Benchmark_Unmarshal_EasyjsonStruct(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		o := object{}
-		o.UnmarshalJSON(unmarshalText)
-	}
-}
-
-func Benchmark__Marshal__EasyjsonStruct(b *testing.B) {
+func Benchmark__Marshal__结构体_easyjson(b *testing.B) {
 	o := object{}
 	o.UnmarshalJSON(unmarshalText)
 	b.ResetTimer()
@@ -135,24 +225,7 @@ func Benchmark__Marshal__EasyjsonStruct(b *testing.B) {
 	}
 }
 
-func Benchmark_Unmarshal_JsoniterMapItf_blob(b *testing.B) {
-	raw := generateLongObject()
-	b.ResetTimer()
-
-	for i := 0; i < b.N; i++ {
-		m := map[string]interface{}{}
-		jsonit.Unmarshal(raw, &m)
-	}
-}
-
-func Benchmark_Unmarshal_JsoniterMapItf(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		m := map[string]interface{}{}
-		jsonit.Unmarshal(unmarshalText, &m)
-	}
-}
-
-func Benchmark__Marshal__JsoniterMapItf(b *testing.B) {
+func Benchmark__Marshal__Jsoniter_MapItf(b *testing.B) {
 	m := map[string]interface{}{}
 	jsonit.Unmarshal(unmarshalText, &m)
 	b.ResetTimer()
@@ -345,34 +418,6 @@ func Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob(b *testing.B) {
 	}
 }
 
-func Benchmark_Unmarshal_Jsonvalue_v1_0_3(b *testing.B) {
-	origB := unmarshalText
-	for i := 0; i < b.N; i++ {
-		jsonvalue103.Unmarshal(origB)
-	}
-}
-
-func Benchmark_Unmarshal_Jsonvalue_v1_0_4(b *testing.B) {
-	origB := unmarshalText
-	for i := 0; i < b.N; i++ {
-		jsonvalue105.Unmarshal(origB)
-	}
-}
-
-func Benchmark_Unmarshal_Jsonvalue_v1_1_1(b *testing.B) {
-	origB := unmarshalText
-	for i := 0; i < b.N; i++ {
-		jsonvalue111.Unmarshal(origB)
-	}
-}
-
-func Benchmark_Unmarshal_Jsonvalue(b *testing.B) {
-	origB := unmarshalText
-	for i := 0; i < b.N; i++ {
-		jsonvalue.Unmarshal(origB)
-	}
-}
-
 func Benchmark_Unmarshal_Jsonvalue_ReadOneChain(b *testing.B) {
 	origB := unmarshalText
 	for i := 0; i < b.N; i++ {
@@ -417,7 +462,7 @@ func Benchmark_Unmarshal_Jsonvalue_blob(b *testing.B) {
 	}
 }
 
-func Benchmark_Unmarshal_JsonvalueNoCopy(b *testing.B) {
+func Benchmark_Unmarshal_Jsonvalue_NoCopy(b *testing.B) {
 	// origB := unmarshalText
 	origB := generateLongObject()
 
