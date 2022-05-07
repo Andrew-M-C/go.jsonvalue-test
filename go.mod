@@ -3,7 +3,7 @@ module go.jsonvalue-test
 go 1.16
 
 require (
-	github.com/Andrew-M-C/go.jsonvalue v1.2.0-alpha.0.20220127103918-3070c5414a68
+	github.com/Andrew-M-C/go.jsonvalue v1.2.1
 	github.com/Andrew-M-C/go.jsonvalue000 v0.0.0
 	github.com/Andrew-M-C/go.jsonvalue103 v0.0.0-00010101000000-000000000000
 	github.com/Andrew-M-C/go.jsonvalue105 v0.0.0-00010101000000-000000000000
