@@ -12,6 +12,7 @@ require (
 	github.com/bytedance/sonic v1.0.0
 	github.com/json-iterator/go v1.1.10
 	github.com/mailru/easyjson v0.7.7
+	github.com/smartystreets/goconvey v1.6.4
 )
 
 replace (

@@ -16,3 +16,6 @@ vendor/
 
 # pprof files
 *.profile
+
+# hidden files
+.*
