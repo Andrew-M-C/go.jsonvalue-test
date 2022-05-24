@@ -1,4 +1,4 @@
-module github.com/Andrew-M-C/go.jsonvalue-test/usedby
+module github.com/Andrew-M-C/go.jsonvalue-test
 
 go 1.16
 
