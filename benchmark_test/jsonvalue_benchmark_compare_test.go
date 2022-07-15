@@ -225,6 +225,59 @@ func Benchmark__Marshal__结构体_easyjson(b *testing.B) {
 	}
 }
 
+func Benchmark__Marshal__结构体_jsonvalue(b *testing.B) {
+	o := object{}
+	o.UnmarshalJSON(unmarshalText)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		v, _ := jsonvalue.Import(&o)
+		v.MustMarshal()
+	}
+}
+
+func Benchmark__Import___结构体_jsonvalue(b *testing.B) {
+	o := object{}
+	o.UnmarshalJSON(unmarshalText)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		jsonvalue.Import(&o)
+	}
+}
+
+func Benchmark__Import___结构体_jsonvalue_beta(b *testing.B) {
+	o := object{}
+	o.UnmarshalJSON(unmarshalText)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		jsonvalue.Import(&o)
+	}
+}
+
+func Benchmark__Import___结构体_jsonvalue_json中转(b *testing.B) {
+	o := object{}
+	o.UnmarshalJSON(unmarshalText)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		b, _ := json.Marshal(&o)
+		jsonvalue.UnmarshalNoCopy(b)
+	}
+}
+
+func Benchmark__Import___结构体_jsonvalue_sonic中转(b *testing.B) {
+	o := object{}
+	o.UnmarshalJSON(unmarshalText)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		b, _ := sonic.Marshal(&o)
+		jsonvalue.UnmarshalNoCopy(b)
+	}
+}
+
 func Benchmark__Marshal__Jsoniter_MapItf(b *testing.B) {
 	m := map[string]interface{}{}
 	jsonit.Unmarshal(unmarshalText, &m)
