@@ -8,7 +8,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-// go test -bench=. -run=none -benchmem -benchtime=2s
+// go test -bench=. -run=none -benchmem -benchtime=2s && go version
 
 func Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob_10_percent(b *testing.B) {
 	raw := generateLongObject()

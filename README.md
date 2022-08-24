@@ -5,73 +5,75 @@ A repo for go.jsonvalue pprof and benchmark test.
 # Test result for reference: 
 
 ```
-% go test -bench=. -run=none -benchmem -benchtime=1s
+% go test -bench=. -run=none -benchmem -benchtime=2s && go version
 goos: darwin
 goarch: amd64
 pkg: github.com/Andrew-M-C/go.jsonvalue-test/benchmark_test
 cpu: Intel(R) Core(TM) i5-1038NG7 CPU @ 2.00GHz
-Benchmark_Unmarshal_结构体_json-8                                  	  142317	      8795 ns/op	    1112 B/op	      25 allocs/op
-Benchmark_Unmarshal_结构体_sonic-8                                 	  197630	      6411 ns/op	    1632 B/op	      21 allocs/op
-Benchmark_Unmarshal_结构体_easyjson-8                              	  319024	      3624 ns/op	     784 B/op	      19 allocs/op
-Benchmark_Unmarshal_结构体_jsoniter-8                              	  200072	      6103 ns/op	    1720 B/op	      56 allocs/op
-Benchmark_Unmarshal_map_interface_json-8                        	  106363	     11200 ns/op	    4480 B/op	     128 allocs/op
-Benchmark_Unmarshal_map_interface_sonic-8                       	  222970	      5234 ns/op	    4997 B/op	      51 allocs/op
-Benchmark_Unmarshal_map_interface_jsoniter-8                    	  141306	      8250 ns/op	    4521 B/op	     136 allocs/op
-Benchmark_Unmarshal_map_interface_json_blob-8                   	    1225	    965584 ns/op	  414652 B/op	   11408 allocs/op
-Benchmark_Unmarshal_map_interface_jsoniter_blob-8               	    1392	    847972 ns/op	  457076 B/op	   13302 allocs/op
-Benchmark_Unmarshal_interface_json-8                            	  123634	     10021 ns/op	    4272 B/op	     117 allocs/op
-Benchmark_Unmarshal_interface_sonic-8                           	  217779	      5371 ns/op	    4885 B/op	      51 allocs/op
-Benchmark_Unmarshal_Jsonvalue_v1_0_3-8                          	  108270	     11157 ns/op	    7184 B/op	     104 allocs/op
-Benchmark_Unmarshal_Jsonvalue_v1_0_4-8                          	   68006	     19081 ns/op	   15824 B/op	     188 allocs/op
-Benchmark_Unmarshal_Jsonvalue_v1_1_1-8                          	  154202	      7691 ns/op	    9072 B/op	      61 allocs/op
-Benchmark_Unmarshal_Jsonvalue-8                                 	  150699	      7558 ns/op	    8320 B/op	      59 allocs/op
-Benchmark_Unmarshal_Jsonvalue_develop-8                         	  162558	      7436 ns/op	    8320 B/op	      59 allocs/op
-Benchmark__Marshal__map_interface_json-8                        	   83882	     14435 ns/op	    6185 B/op	     121 allocs/op
-Benchmark__Marshal__结构体_json-8                                  	  201583	      5723 ns/op	    1882 B/op	       6 allocs/op
-Benchmark__Marshal__结构体_jsoniter-8                              	  207591	      5753 ns/op	    1882 B/op	       6 allocs/op
-Benchmark__Marshal__结构体_easyjson-8                              	  521811	      2366 ns/op	    1240 B/op	       5 allocs/op
-Benchmark__Marshal__结构体_jsonvalue-8                             	   27642	     39982 ns/op	   23984 B/op	     348 allocs/op
-Benchmark__Import___结构体_jsonvalue-8                             	   38191	     29660 ns/op	   20432 B/op	     341 allocs/op
-Benchmark__Import___结构体_jsonvalue_beta-8                        	   41816	     28681 ns/op	   20432 B/op	     341 allocs/op
-Benchmark__Import___结构体_jsonvalue_json中转-8                      	   85194	     13749 ns/op	    9571 B/op	      64 allocs/op
-Benchmark__Import___结构体_jsonvalue_sonic中转-8                     	   90510	     12715 ns/op	   13660 B/op	      67 allocs/op
-Benchmark__Marshal__Jsoniter_MapItf-8                           	   82110	     14334 ns/op	    6185 B/op	     121 allocs/op
-Benchmark____Get____Jsoniter-8                                  	  566554	      2239 ns/op	     912 B/op	      36 allocs/op
-Benchmark____Get____Jsoniter_Full-8                             	   28827	     42824 ns/op	   12659 B/op	     671 allocs/op
-Benchmark____Get____Jsoniter_AndGetParsedValue-8                	  199940	      5980 ns/op	    2112 B/op	     103 allocs/op
-Benchmark____Get____Jsoniter_ReadOneChain-8                     	  145426	      8243 ns/op	    3024 B/op	     139 allocs/op
-Benchmark____Get____Jsoniter_ReadLevelOne-8                     	  273231	      4454 ns/op	    1344 B/op	      73 allocs/op
-Benchmark____Get____Jsoniter_ReadOneChain_Blob-8                	   44958	     26569 ns/op	    4913 B/op	     469 allocs/op
-Benchmark_Unmarshal_Jsonparser_Full-8                           	  389695	      3137 ns/op	       0 B/op	       0 allocs/op
-Benchmark_Unmarshal_Jsonparser_ReadLevelOne-8                   	 1626951	       725.9 ns/op	       0 B/op	       0 allocs/op
-Benchmark_Unmarshal_Jsonparser_ReadLevelOne_Blob-8              	   17390	     69807 ns/op	       0 B/op	       0 allocs/op
-Benchmark_Unmarshal_Jsonparser_ReadOneChain-8                   	 1651392	       711.9 ns/op	       0 B/op	       0 allocs/op
-Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob-8              	  150801	      7712 ns/op	       0 B/op	       0 allocs/op
-Benchmark_Unmarshal_Jsonvalue_ReadOneChain-8                    	  153502	      7734 ns/op	    8320 B/op	      59 allocs/op
-Benchmark_Unmarshal_Jsonvalue_ReadOneChain_Blob-8               	    1478	    775468 ns/op	  841855 B/op	    5811 allocs/op
-Benchmark_Unmarshal_Jsonvalue_GetByInterface-8                  	15121879	        77.69 ns/op	       0 B/op	       0 allocs/op
-Benchmark_Unmarshal_Jsonvalue_GetByInterfaceCaseless-8          	 8302702	       145.7 ns/op	      72 B/op	       2 allocs/op
-Benchmark_Unmarshal_Jsonvalue_blob-8                            	    1393	    812793 ns/op	  841743 B/op	    5811 allocs/op
-Benchmark_Unmarshal_Jsonvalue_NoCopy-8                          	    1612	    686008 ns/op	  776201 B/op	    5810 allocs/op
-Benchmark__Marshal__Jsonvalue-8                                 	  256501	      4690 ns/op	    3552 B/op	       7 allocs/op
-Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob_10_percent-8   	   29874	     40004 ns/op	       0 B/op	       0 allocs/op
-Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob_20_percent-8   	    7876	    154841 ns/op	       0 B/op	       0 allocs/op
-Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob_30_percent-8   	    3480	    360041 ns/op	       0 B/op	       0 allocs/op
-Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob_40_percent-8   	    1622	    650095 ns/op	       0 B/op	       0 allocs/op
-Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob_50_percent-8   	    1190	    948552 ns/op	       0 B/op	       0 allocs/op
-Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob_60_percent-8   	     904	   1319657 ns/op	       0 B/op	       0 allocs/op
-Benchmark____Get____Jsoniter_ReadOneChain_Blob_10_percent-8     	    7131	    165898 ns/op	   38571 B/op	    2865 allocs/op
-Benchmark____Get____Jsoniter_ReadOneChain_Blob_20_percent-8     	    2282	    520144 ns/op	   96350 B/op	    9085 allocs/op
-Benchmark____Get____Jsoniter_ReadOneChain_Blob_30_percent-8     	    1102	   1071902 ns/op	  173334 B/op	   18705 allocs/op
-Benchmark____Get____Jsoniter_ReadOneChain_Blob_40_percent-8     	     664	   2074838 ns/op	  269524 B/op	   31725 allocs/op
-Benchmark____Get____Jsoniter_ReadOneChain_Blob_50_percent-8     	     435	   2750043 ns/op	  384921 B/op	   48145 allocs/op
-Benchmark____Get____Jsoniter_ReadOneChain_Blob_60_percent-8     	     316	   3878384 ns/op	  519521 B/op	   67965 allocs/op
-Benchmark_Unmarshal_Jsonvalue_ReadOneChain_Blob_10_percent-8    	    1478	    802965 ns/op	  841864 B/op	    5811 allocs/op
-Benchmark_Unmarshal_Jsonvalue_ReadOneChain_Blob_20_percent-8    	    1488	    809192 ns/op	  841863 B/op	    5811 allocs/op
-Benchmark_Unmarshal_Jsonvalue_ReadOneChain_Blob_30_percent-8    	    1434	    807907 ns/op	  841862 B/op	    5811 allocs/op
-Benchmark_Unmarshal_Jsonvalue_ReadOneChain_Blob_40_percent-8    	    1441	    824380 ns/op	  841865 B/op	    5811 allocs/op
-Benchmark_Unmarshal_Jsonvalue_ReadOneChain_Blob_50_percent-8    	    1436	    812454 ns/op	  841868 B/op	    5811 allocs/op
-Benchmark_Unmarshal_Jsonvalue_ReadOneChain_Blob_60_percent-8    	    1479	    815053 ns/op	  841852 B/op	    5811 allocs/op
+Benchmark_Unmarshal_结构体_json-8                                  	  294295	      7938 ns/op	    1112 B/op	      25 allocs/op
+Benchmark_Unmarshal_结构体_sonic-8                                 	  466478	      5062 ns/op	    1617 B/op	      21 allocs/op
+Benchmark_Unmarshal_结构体_easyjson-8                              	  697129	      3492 ns/op	     784 B/op	      19 allocs/op
+Benchmark_Unmarshal_结构体_jsoniter-8                              	  379947	      6036 ns/op	    1720 B/op	      56 allocs/op
+Benchmark_Unmarshal_map_interface_json-8                        	  213194	     11340 ns/op	    4480 B/op	     128 allocs/op
+Benchmark_Unmarshal_map_interface_sonic-8                       	  445749	      5430 ns/op	    5011 B/op	      51 allocs/op
+Benchmark_Unmarshal_map_interface_jsoniter-8                    	  286650	      8451 ns/op	    4521 B/op	     136 allocs/op
+Benchmark_Unmarshal_map_interface_json_blob-8                   	    2504	    990808 ns/op	  414635 B/op	   11408 allocs/op
+Benchmark_Unmarshal_map_interface_jsoniter_blob-8               	    2790	   1473645 ns/op	  457071 B/op	   13302 allocs/op
+Benchmark_Unmarshal_interface_json-8                            	  246636	      9870 ns/op	    4272 B/op	     117 allocs/op
+Benchmark_Unmarshal_interface_sonic-8                           	  472128	      5412 ns/op	    4918 B/op	      51 allocs/op
+Benchmark_Unmarshal_Jsonvalue_v1_0_3-8                          	  225663	     11909 ns/op	    7184 B/op	     104 allocs/op
+Benchmark_Unmarshal_Jsonvalue_v1_0_4-8                          	  134397	     17612 ns/op	   15824 B/op	     188 allocs/op
+Benchmark_Unmarshal_Jsonvalue_v1_1_1-8                          	  316526	      7703 ns/op	    9072 B/op	      61 allocs/op
+Benchmark_Unmarshal_Jsonvalue_latest-8                          	  295659	      8113 ns/op	    9648 B/op	      59 allocs/op
+Benchmark_Unmarshal_Jsonvalue_develop-8                         	  301324	      8060 ns/op	    9648 B/op	      59 allocs/op
+Benchmark__Marshal__map_interface_json-8                        	  178966	     13566 ns/op	    5033 B/op	     103 allocs/op
+Benchmark__Marshal__结构体_json-8                                  	  455828	      5252 ns/op	    1882 B/op	       6 allocs/op
+Benchmark__Marshal__结构体_jsoniter-8                              	  451641	      5561 ns/op	    1882 B/op	       6 allocs/op
+Benchmark__Marshal__结构体_easyjson-8                              	 1000000	      2160 ns/op	    1240 B/op	       5 allocs/op
+Benchmark__Marshal__结构体_jsonvalue-8                             	   66747	     37236 ns/op	   26352 B/op	     349 allocs/op
+Benchmark__Import___结构体_jsonvalue-8                             	   79520	     30551 ns/op	   23040 B/op	     342 allocs/op
+Benchmark__Import___结构体_jsonvalue_beta-8                        	   77769	     32856 ns/op	   23040 B/op	     342 allocs/op
+Benchmark__Import___结构体_jsonvalue_json中转-8                      	  170487	     13909 ns/op	   10902 B/op	      64 allocs/op
+Benchmark__Import___结构体_jsonvalue_sonic中转-8                     	  169934	     13861 ns/op	   15978 B/op	      67 allocs/op
+Benchmark__Marshal__Jsoniter_MapItf-8                           	  184538	     14223 ns/op	    5033 B/op	     103 allocs/op
+Benchmark____Get____Jsoniter-8                                  	 1000000	      2371 ns/op	     912 B/op	      36 allocs/op
+Benchmark____Get____Jsoniter_Full-8                             	   55200	     41864 ns/op	   12660 B/op	     671 allocs/op
+Benchmark____Get____Jsoniter_AndGetParsedValue-8                	  384169	      5999 ns/op	    2112 B/op	     103 allocs/op
+Benchmark____Get____Jsoniter_ReadOneChain-8                     	  291406	      8073 ns/op	    3024 B/op	     139 allocs/op
+Benchmark____Get____Jsoniter_ReadLevelOne-8                     	  543280	      4495 ns/op	    1344 B/op	      73 allocs/op
+Benchmark____Get____Jsoniter_ReadOneChain_Blob-8                	   83427	     26672 ns/op	    4913 B/op	     469 allocs/op
+Benchmark_Unmarshal_Jsonparser_Full-8                           	  767538	      3168 ns/op	       0 B/op	       0 allocs/op
+Benchmark_Unmarshal_Jsonparser_ReadLevelOne-8                   	 2813214	       839.1 ns/op	       0 B/op	       0 allocs/op
+Benchmark_Unmarshal_Jsonparser_ReadLevelOne_Blob-8              	   29110	     82785 ns/op	       0 B/op	       0 allocs/op
+Benchmark_Unmarshal_Jsonparser_ReadOneChain-8                   	 2646948	       851.8 ns/op	       0 B/op	       0 allocs/op
+Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob-8              	  266882	      9122 ns/op	       0 B/op	       0 allocs/op
+Benchmark_Unmarshal_Jsonvalue_ReadOneChain-8                    	  288812	      8328 ns/op	    9648 B/op	      59 allocs/op
+Benchmark_Unmarshal_Jsonvalue_ReadOneChain_Blob-8               	    2836	    863294 ns/op	  977068 B/op	    5813 allocs/op
+Benchmark_Unmarshal_Jsonvalue_GetByInterface-8                  	29455364	        80.11 ns/op	       0 B/op	       0 allocs/op
+Benchmark_Unmarshal_Jsonvalue_GetByInterfaceCaseless-8          	16394924	       145.2 ns/op	      72 B/op	       2 allocs/op
+Benchmark_Unmarshal_Jsonvalue_blob-8                            	    2816	    871894 ns/op	  976997 B/op	    5813 allocs/op
+Benchmark_Unmarshal_Jsonvalue_NoCopy-8                          	    3217	    830974 ns/op	  911463 B/op	    5812 allocs/op
+Benchmark__Marshal__Jsonvalue-8                                 	  511050	      4484 ns/op	    3312 B/op	       7 allocs/op
+Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob_10_percent-8   	   52806	     45613 ns/op	       0 B/op	       0 allocs/op
+Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob_20_percent-8   	   13869	    168466 ns/op	       0 B/op	       0 allocs/op
+Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob_30_percent-8   	    6277	    383470 ns/op	       0 B/op	       0 allocs/op
+Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob_40_percent-8   	    3552	    703403 ns/op	       0 B/op	       0 allocs/op
+Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob_50_percent-8   	    2080	   1127641 ns/op	       0 B/op	       0 allocs/op
+Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob_60_percent-8   	    1581	   1515289 ns/op	       0 B/op	       0 allocs/op
+Benchmark____Get____Jsoniter_ReadOneChain_Blob_10_percent-8     	   13821	    164680 ns/op	   38572 B/op	    2865 allocs/op
+Benchmark____Get____Jsoniter_ReadOneChain_Blob_20_percent-8     	    4615	    519833 ns/op	   96352 B/op	    9085 allocs/op
+Benchmark____Get____Jsoniter_ReadOneChain_Blob_30_percent-8     	    2113	   1069588 ns/op	  173336 B/op	   18705 allocs/op
+Benchmark____Get____Jsoniter_ReadOneChain_Blob_40_percent-8     	    1284	   1783813 ns/op	  269528 B/op	   31725 allocs/op
+Benchmark____Get____Jsoniter_ReadOneChain_Blob_50_percent-8     	     879	   2662526 ns/op	  384926 B/op	   48145 allocs/op
+Benchmark____Get____Jsoniter_ReadOneChain_Blob_60_percent-8     	     632	   3807361 ns/op	  519532 B/op	   67965 allocs/op
+Benchmark_Unmarshal_Jsonvalue_ReadOneChain_Blob_10_percent-8    	    2767	    871396 ns/op	  977057 B/op	    5813 allocs/op
+Benchmark_Unmarshal_Jsonvalue_ReadOneChain_Blob_20_percent-8    	    2763	    876718 ns/op	  977066 B/op	    5813 allocs/op
+Benchmark_Unmarshal_Jsonvalue_ReadOneChain_Blob_30_percent-8    	    2734	    896607 ns/op	  977074 B/op	    5813 allocs/op
+Benchmark_Unmarshal_Jsonvalue_ReadOneChain_Blob_40_percent-8    	    2646	    884687 ns/op	  977072 B/op	    5813 allocs/op
+Benchmark_Unmarshal_Jsonvalue_ReadOneChain_Blob_50_percent-8    	    2584	    902536 ns/op	  977074 B/op	    5813 allocs/op
+Benchmark_Unmarshal_Jsonvalue_ReadOneChain_Blob_60_percent-8    	    2690	    904053 ns/op	  977066 B/op	    5813 allocs/op
 PASS
-ok  	github.com/Andrew-M-C/go.jsonvalue-test/benchmark_test	83.698s
+ok  	github.com/Andrew-M-C/go.jsonvalue-test/benchmark_test	166.119s
+go version go1.19 darwin/amd64
+
 ```
