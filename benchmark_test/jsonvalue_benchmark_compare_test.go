@@ -16,7 +16,16 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-// go test -bench=. -run=none -benchmem -benchtime=1s
+//go:generate go get -u github.com/buger/jsonparser
+//go:generate go get -u github.com/bytedance/sonic
+//go:generate go get -u github.com/json-iterator/go
+//go:generate go get -u github.com/mailru/easyjson
+//go:generate go mod tidy
+//go:generate easyjson -all object.go
+//go:generate go test -bench=. -run=none -benchmem -benchtime=2s
+//go:generate go version
+
+// go test -bench=. -run=none -benchmem -benchtime=2s && go version
 
 var unmarshalText = []byte(`{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!","object":{"int":123456,"float":123.456789,"string":"Hello, world!"},"array":[{"int":123456,"float":123.456789,"string":"Hello, world!"},{"int":123456,"float":123.456789,"string":"Hello, world!"}]}}},"array":[{"int":123456,"float":123.456789,"string":"Hello, world!"},{"int":123456,"float":123.456789,"string":"Hello, world!"}]}`)
 var jsonit = jsoniter.ConfigCompatibleWithStandardLibrary
@@ -75,69 +84,69 @@ func Benchmark_Unmarshal_结构体_jsoniter(b *testing.B) {
 	}
 }
 
-func Benchmark_Unmarshal_map_interface_json(b *testing.B) {
+func Benchmark_Unmarshal_map_any_json(b *testing.B) {
 	raw := unmarshalText
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		m := map[string]interface{}{}
+		m := map[string]any{}
 		json.Unmarshal(raw, &m)
 	}
 }
 
-func Benchmark_Unmarshal_map_interface_sonic(b *testing.B) {
+func Benchmark_Unmarshal_map_any_sonic(b *testing.B) {
 	raw := unmarshalText
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		m := map[string]interface{}{}
+		m := map[string]any{}
 		sonic.Unmarshal(raw, &m)
 	}
 }
 
-func Benchmark_Unmarshal_map_interface_jsoniter(b *testing.B) {
+func Benchmark_Unmarshal_map_any_jsoniter(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		m := map[string]interface{}{}
+		m := map[string]any{}
 		jsonit.Unmarshal(unmarshalText, &m)
 	}
 }
 
-func Benchmark_Unmarshal_map_interface_json_blob(b *testing.B) {
+func Benchmark_Unmarshal_map_any_json_blob(b *testing.B) {
 	raw := generateLongObject()
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		m := map[string]interface{}{}
+		m := map[string]any{}
 		json.Unmarshal(raw, &m)
 	}
 }
 
-func Benchmark_Unmarshal_map_interface_jsoniter_blob(b *testing.B) {
+func Benchmark_Unmarshal_map_any_jsoniter_blob(b *testing.B) {
 	raw := generateLongObject()
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		m := map[string]interface{}{}
+		m := map[string]any{}
 		jsonit.Unmarshal(raw, &m)
 	}
 }
 
-func Benchmark_Unmarshal_interface_json(b *testing.B) {
+func Benchmark_Unmarshal_any_json(b *testing.B) {
 	raw := unmarshalText
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		var m interface{}
+		var m any
 		json.Unmarshal(raw, &m)
 	}
 }
 
-func Benchmark_Unmarshal_interface_sonic(b *testing.B) {
+func Benchmark_Unmarshal_any_sonic(b *testing.B) {
 	raw := unmarshalText
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		var m interface{}
+		var m any
 		sonic.Unmarshal(raw, &m)
 	}
 }
@@ -177,8 +186,8 @@ func Benchmark_Unmarshal_Jsonvalue_develop(b *testing.B) {
 	}
 }
 
-func Benchmark__Marshal__map_interface_json(b *testing.B) {
-	m := map[string]interface{}{}
+func Benchmark__Marshal__map_any_json(b *testing.B) {
+	m := map[string]any{}
 	json.Unmarshal(unmarshalText, &m)
 	b.ResetTimer()
 
@@ -246,16 +255,6 @@ func Benchmark__Import___结构体_jsonvalue(b *testing.B) {
 	}
 }
 
-func Benchmark__Import___结构体_jsonvalue_beta(b *testing.B) {
-	o := object{}
-	o.UnmarshalJSON(unmarshalText)
-	b.ResetTimer()
-
-	for i := 0; i < b.N; i++ {
-		jsonvalue.Import(&o)
-	}
-}
-
 func Benchmark__Import___结构体_jsonvalue_json中转(b *testing.B) {
 	o := object{}
 	o.UnmarshalJSON(unmarshalText)
@@ -279,7 +278,7 @@ func Benchmark__Import___结构体_jsonvalue_sonic中转(b *testing.B) {
 }
 
 func Benchmark__Marshal__Jsoniter_MapItf(b *testing.B) {
-	m := map[string]interface{}{}
+	m := map[string]any{}
 	jsonit.Unmarshal(unmarshalText, &m)
 	b.ResetTimer()
 
