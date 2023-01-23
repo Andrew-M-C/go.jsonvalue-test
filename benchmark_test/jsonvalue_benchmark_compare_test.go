@@ -131,6 +131,16 @@ func Benchmark_Unmarshal_map_any_jsoniter_blob(b *testing.B) {
 	}
 }
 
+func Benchmark_Unmarshal_map_any_sonic_blob(b *testing.B) {
+	raw := generateLongObject()
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		m := map[string]any{}
+		sonic.Unmarshal(raw, &m)
+	}
+}
+
 func Benchmark_Unmarshal_any_json(b *testing.B) {
 	raw := unmarshalText
 	b.ResetTimer()
@@ -511,6 +521,16 @@ func Benchmark_Unmarshal_Jsonvalue_blob(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		jsonvalue.Unmarshal(origB)
+	}
+}
+
+func Benchmark_Unmarshal_Jsonvalue_develop_blob(b *testing.B) {
+	// origB := unmarshalText
+	origB := generateLongObject()
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		jsonvalue000.Unmarshal(origB)
 	}
 }
 
