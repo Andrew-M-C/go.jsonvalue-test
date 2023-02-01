@@ -51,10 +51,10 @@ func generateLongObject() []byte {
 	return buff.Bytes()
 }
 
-// func init() {
-// 	largeText := generateLongObject()
-// 	fmt.Println(string(largeText))
-// }
+func init() {
+	jsonvalue.SetDefaultMarshalOptions(jsonvalue.OptUTF8())
+	jsonvalue000.SetDefaultMarshalOptions(jsonvalue000.OptUTF8())
+}
 
 func Benchmark_Unmarshal_结构体_json(b *testing.B) {
 	for i := 0; i < b.N; i++ {
@@ -74,6 +74,13 @@ func Benchmark_Unmarshal_结构体_easyjson(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		o := object{}
 		o.UnmarshalJSON(unmarshalText)
+	}
+}
+
+func Benchmark_Unmarshal_结构体_manual_by_jsonvalue(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		o := object{}
+		o.UnmarshalJsonvalue(unmarshalText)
 	}
 }
 
