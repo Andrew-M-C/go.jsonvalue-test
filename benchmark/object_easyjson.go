@@ -17,7 +17,7 @@ var (
 	_ easyjson.Marshaler
 )
 
-func easyjsonE44bcf2dDecodeGithubComAndrewMCGoJsonvalueTestBenchmarkTest(in *jlexer.Lexer, out *object) {
+func easyjsonE44bcf2dDecodeGithubComAndrewMCGoJsonvalueTestBenchmark(in *jlexer.Lexer, out *object) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -93,7 +93,7 @@ func easyjsonE44bcf2dDecodeGithubComAndrewMCGoJsonvalueTestBenchmarkTest(in *jle
 		in.Consumed()
 	}
 }
-func easyjsonE44bcf2dEncodeGithubComAndrewMCGoJsonvalueTestBenchmarkTest(out *jwriter.Writer, in object) {
+func easyjsonE44bcf2dEncodeGithubComAndrewMCGoJsonvalueTestBenchmark(out *jwriter.Writer, in object) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -141,23 +141,23 @@ func easyjsonE44bcf2dEncodeGithubComAndrewMCGoJsonvalueTestBenchmarkTest(out *jw
 // MarshalJSON supports json.Marshaler interface
 func (v object) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjsonE44bcf2dEncodeGithubComAndrewMCGoJsonvalueTestBenchmarkTest(&w, v)
+	easyjsonE44bcf2dEncodeGithubComAndrewMCGoJsonvalueTestBenchmark(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v object) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjsonE44bcf2dEncodeGithubComAndrewMCGoJsonvalueTestBenchmarkTest(w, v)
+	easyjsonE44bcf2dEncodeGithubComAndrewMCGoJsonvalueTestBenchmark(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *object) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjsonE44bcf2dDecodeGithubComAndrewMCGoJsonvalueTestBenchmarkTest(&r, v)
+	easyjsonE44bcf2dDecodeGithubComAndrewMCGoJsonvalueTestBenchmark(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *object) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjsonE44bcf2dDecodeGithubComAndrewMCGoJsonvalueTestBenchmarkTest(l, v)
+	easyjsonE44bcf2dDecodeGithubComAndrewMCGoJsonvalueTestBenchmark(l, v)
 }

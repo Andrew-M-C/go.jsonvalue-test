@@ -1,4 +1,4 @@
-module github.com/Andrew-M-C/go.jsonvalue-test/benchmark_test
+module github.com/Andrew-M-C/go.jsonvalue-test/benchmark
 
 go 1.18
 
