@@ -224,6 +224,20 @@ func Benchmark__Marshal__结构体_json(b *testing.B) {
 	}
 }
 
+func Benchmark__Marshal__结构体_sonic(b *testing.B) {
+	o := object{}
+	sonic.Unmarshal(unmarshalText, &o)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_, err := sonic.Marshal(&o)
+		if err != nil {
+			b.Errorf("marshal error: %v", err)
+			return
+		}
+	}
+}
+
 func Benchmark__Marshal__结构体_jsoniter(b *testing.B) {
 	o := object{}
 	jsonit.Unmarshal(unmarshalText, &o)
@@ -555,6 +569,19 @@ func Benchmark_Unmarshal_Jsonvalue_NoCopy(b *testing.B) {
 
 func Benchmark__Marshal__Jsonvalue(b *testing.B) {
 	j, _ := jsonvalue.Unmarshal(unmarshalText)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_, err := j.Marshal()
+		if err != nil {
+			b.Errorf("marshal error: %v", err)
+			return
+		}
+	}
+}
+
+func Benchmark__Marshal__Jsonvalue_develop(b *testing.B) {
+	j, _ := jsonvalue000.Unmarshal(unmarshalText)
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
