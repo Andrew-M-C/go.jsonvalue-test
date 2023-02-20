@@ -8,9 +8,9 @@ import (
 	"runtime/trace"
 	"time"
 
-	jsonvalue "github.com/Andrew-M-C/go.jsonvalue"
-	jsonvalue000 "github.com/Andrew-M-C/go.jsonvalue000"
+	jsonvalue000 "github.com/Andrew-M-C/go.jsonvalue"
 	jsonvalue111 "github.com/Andrew-M-C/go.jsonvalue111"
+	jsonvalue133 "github.com/Andrew-M-C/go.jsonvalue133"
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -40,7 +40,7 @@ func jsonvalueUnmarshalTraceTest() {
 	defer trace.Stop()
 
 	for i := 0; i < iteration; i++ {
-		_, err = jsonvalue.Unmarshal(unmarshalText)
+		_, err = jsonvalue133.Unmarshal(unmarshalText)
 		if err != nil {
 			printf("unmarshal error: %v", err)
 			return
@@ -120,7 +120,7 @@ func jsonvalueUnmarshalFloatTest() {
 	defer pprof.StopCPUProfile()
 
 	for i := 0; i < iteration*10; i++ {
-		_, err := jsonvalue.Unmarshal(unmarshalFloatText)
+		_, err := jsonvalue133.Unmarshal(unmarshalFloatText)
 		if err != nil {
 			printf("unmarshal error: %v", err)
 			return
@@ -140,7 +140,7 @@ func jsonvalueUnmarshalTest() {
 	defer pprof.StopCPUProfile()
 
 	for i := 0; i < iteration; i++ {
-		_, err := jsonvalue.Unmarshal(unmarshalText)
+		_, err := jsonvalue133.Unmarshal(unmarshalText)
 		if err != nil {
 			printf("unmarshal error: %v", err)
 			return
@@ -151,13 +151,40 @@ func jsonvalueUnmarshalTest() {
 }
 
 func jsonvalueMarshalTest() {
-	j, err := jsonvalue.Unmarshal(unmarshalText)
+	j, err := jsonvalue133.Unmarshal(unmarshalText)
 	if err != nil {
 		printf("marshal error: %v", err)
 		return
 	}
 
 	f, err := os.OpenFile("jsonvalue-marshal.profile", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer f.Close()
+	pprof.StartCPUProfile(f)
+	defer pprof.StopCPUProfile()
+
+	for i := 0; i < iteration; i++ {
+		_, err = j.Marshal()
+		if err != nil {
+			printf("marshal error: %v", err)
+			return
+		}
+	}
+
+	printf("jsonvalue marshal done")
+}
+
+func jsonvalue000MarshalTest() {
+	j, err := jsonvalue000.Unmarshal(unmarshalText)
+	if err != nil {
+		printf("marshal error: %v", err)
+		return
+	}
+
+	f, err := os.OpenFile("jsonvalue-marshal-v000.profile", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -348,12 +375,14 @@ func jsoniterMarshalTest() {
 }
 
 func main() {
+	jsonvalue133.SetDefaultMarshalOptions(jsonvalue133.OptUTF8())
+
 	run := func(f func()) {
 		start := time.Now().Local()
+		printf("----------------")
 		printf("start: %v", start)
 		f()
 		printf("Done, elapsed %v", time.Since(start))
-		printf("To view result, run 'go tool pprof -http=:6060 ./xxx.profile'")
 	}
 
 	run(jsonvalueUnmarshalTraceTest)
@@ -362,6 +391,7 @@ func main() {
 	run(jsonvalueUnmarshalTest)
 	run(jsonvalue000UnmarshalTest)
 	run(jsonvalueMarshalTest)
+	run(jsonvalue000MarshalTest)
 
 	run(jsonvalue111UnmarshalFloatTest)
 	run(jsonvalueUnmarshalFloatTest)
@@ -375,4 +405,6 @@ func main() {
 	run(jsoniterGetTest)
 	run(jsoniterUnmarshalTest)
 	run(jsoniterMarshalTest)
+
+	printf("To view result, run 'go tool pprof -http=:6060 ./xxx.profile'")
 }

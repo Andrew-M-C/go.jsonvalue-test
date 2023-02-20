@@ -6,11 +6,11 @@ import (
 	"strconv"
 	"testing"
 
-	jsonvalue "github.com/Andrew-M-C/go.jsonvalue"
-	jsonvalue000 "github.com/Andrew-M-C/go.jsonvalue000"
+	jsonvalue000 "github.com/Andrew-M-C/go.jsonvalue"
 	jsonvalue103 "github.com/Andrew-M-C/go.jsonvalue103"
 	jsonvalue105 "github.com/Andrew-M-C/go.jsonvalue105"
 	jsonvalue111 "github.com/Andrew-M-C/go.jsonvalue111"
+	jsonvalue133 "github.com/Andrew-M-C/go.jsonvalue133"
 	jsonparser "github.com/buger/jsonparser"
 	sonic "github.com/bytedance/sonic"
 	jsoniter "github.com/json-iterator/go"
@@ -52,7 +52,7 @@ func generateLongObject() []byte {
 }
 
 func init() {
-	jsonvalue.SetDefaultMarshalOptions(jsonvalue.OptUTF8())
+	jsonvalue133.SetDefaultMarshalOptions(jsonvalue133.OptUTF8())
 	jsonvalue000.SetDefaultMarshalOptions(jsonvalue000.OptUTF8())
 }
 
@@ -192,7 +192,7 @@ func Benchmark_Unmarshal_Jsonvalue_v1_1_1(b *testing.B) {
 func Benchmark_Unmarshal_Jsonvalue_latest(b *testing.B) {
 	origB := unmarshalText
 	for i := 0; i < b.N; i++ {
-		jsonvalue.Unmarshal(origB)
+		jsonvalue133.Unmarshal(origB)
 	}
 }
 
@@ -271,7 +271,7 @@ func Benchmark__Marshal__结构体_jsonvalue(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		v, _ := jsonvalue.Import(&o)
+		v, _ := jsonvalue133.Import(&o)
 		v.MustMarshal()
 	}
 }
@@ -282,7 +282,7 @@ func Benchmark__Import___结构体_jsonvalue(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		jsonvalue.Import(&o)
+		jsonvalue133.Import(&o)
 	}
 }
 
@@ -293,7 +293,7 @@ func Benchmark__Import___结构体_jsonvalue_json中转(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		b, _ := json.Marshal(&o)
-		jsonvalue.UnmarshalNoCopy(b)
+		jsonvalue133.UnmarshalNoCopy(b)
 	}
 }
 
@@ -304,7 +304,7 @@ func Benchmark__Import___结构体_jsonvalue_sonic中转(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		b, _ := sonic.Marshal(&o)
-		jsonvalue.UnmarshalNoCopy(b)
+		jsonvalue133.UnmarshalNoCopy(b)
 	}
 }
 
@@ -426,7 +426,7 @@ func Benchmark_Unmarshal_Jsonparser_Full(b *testing.B) {
 	var objEach func([]byte, []byte, jsonparser.ValueType, int) error
 	var arrEach func([]byte, jsonparser.ValueType, int, error)
 
-	objEach = func(k, v []byte, t jsonparser.ValueType, _ int) (noErr error) {
+	objEach = func(_, v []byte, t jsonparser.ValueType, _ int) (noErr error) {
 		switch t {
 		default:
 			// do nothing
@@ -504,7 +504,7 @@ func Benchmark_Unmarshal_Jsonparser_ReadOneChain_Blob(b *testing.B) {
 func Benchmark_Unmarshal_Jsonvalue_ReadOneChain(b *testing.B) {
 	origB := unmarshalText
 	for i := 0; i < b.N; i++ {
-		v, _ := jsonvalue.Unmarshal(origB)
+		v, _ := jsonvalue133.Unmarshal(origB)
 		v.Get("object", "object", "object", "array", 1)
 	}
 }
@@ -512,13 +512,13 @@ func Benchmark_Unmarshal_Jsonvalue_ReadOneChain(b *testing.B) {
 func Benchmark_Unmarshal_Jsonvalue_ReadOneChain_Blob(b *testing.B) {
 	origB := generateLongObject()
 	for i := 0; i < b.N; i++ {
-		v, _ := jsonvalue.Unmarshal(origB)
+		v, _ := jsonvalue133.Unmarshal(origB)
 		v.Get("50", "object", "object", "object", "array", 1)
 	}
 }
 
 func Benchmark_Unmarshal_Jsonvalue_GetByInterface(b *testing.B) {
-	v, _ := jsonvalue.Unmarshal(unmarshalText)
+	v, _ := jsonvalue133.Unmarshal(unmarshalText)
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
@@ -527,7 +527,7 @@ func Benchmark_Unmarshal_Jsonvalue_GetByInterface(b *testing.B) {
 }
 
 func Benchmark_Unmarshal_Jsonvalue_GetByInterfaceCaseless(b *testing.B) {
-	v, _ := jsonvalue.Unmarshal(unmarshalText)
+	v, _ := jsonvalue133.Unmarshal(unmarshalText)
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
@@ -541,7 +541,7 @@ func Benchmark_Unmarshal_Jsonvalue_blob(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		jsonvalue.Unmarshal(origB)
+		jsonvalue133.Unmarshal(origB)
 	}
 }
 
@@ -570,12 +570,12 @@ func Benchmark_Unmarshal_Jsonvalue_NoCopy(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		// err := jsonit.Unmarshal(raw, &s)
-		jsonvalue.UnmarshalNoCopy(lst[i])
+		jsonvalue133.UnmarshalNoCopy(lst[i])
 	}
 }
 
 func Benchmark__Marshal__Jsonvalue(b *testing.B) {
-	j, _ := jsonvalue.Unmarshal(unmarshalText)
+	j, _ := jsonvalue133.Unmarshal(unmarshalText)
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {

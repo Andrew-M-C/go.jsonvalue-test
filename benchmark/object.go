@@ -1,7 +1,7 @@
 package benchmark
 
 import (
-	jsonvalue "github.com/Andrew-M-C/go.jsonvalue"
+	jsonvalue133 "github.com/Andrew-M-C/go.jsonvalue133"
 )
 
 //go:generate go get -u github.com/mailru/easyjson
@@ -16,7 +16,7 @@ type object struct {
 }
 
 func (o *object) UnmarshalJsonvalue(b []byte) error {
-	v, err := jsonvalue.Unmarshal(b)
+	v, err := jsonvalue133.Unmarshal(b)
 	if err != nil {
 		return err
 	}
@@ -25,7 +25,7 @@ func (o *object) UnmarshalJsonvalue(b []byte) error {
 	return nil
 }
 
-func (o *object) unmarshalFromJsonvalue(v *jsonvalue.V) {
+func (o *object) unmarshalFromJsonvalue(v *jsonvalue133.V) {
 	o.Int, _ = v.GetInt("int")
 	o.Float, _ = v.GetFloat64("float")
 	o.String, _ = v.GetString("string")
@@ -37,7 +37,7 @@ func (o *object) unmarshalFromJsonvalue(v *jsonvalue.V) {
 
 	if sub, err := v.GetArray("array"); err == nil {
 		o.Array = make([]*object, 0, sub.Len())
-		sub.RangeArray(func(_ int, subSub *jsonvalue.V) bool {
+		sub.RangeArray(func(_ int, subSub *jsonvalue133.V) bool {
 			subO := &object{}
 			subO.unmarshalFromJsonvalue(subSub)
 			o.Array = append(o.Array, subO)
