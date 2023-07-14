@@ -189,7 +189,7 @@ func Benchmark_Unmarshal_Jsonvalue_v1_1_1(b *testing.B) {
 	}
 }
 
-func Benchmark_Unmarshal_Jsonvalue_latest(b *testing.B) {
+func Benchmark_Unmarshal_Jsonvalue_v1_3_3(b *testing.B) {
 	origB := unmarshalText
 	for i := 0; i < b.N; i++ {
 		jsonvalue133.Unmarshal(origB)
