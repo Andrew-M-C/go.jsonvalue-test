@@ -8,6 +8,7 @@ import (
 	"runtime/trace"
 	"time"
 
+	jsonvalue "github.com/Andrew-M-C/go.jsonvalue"
 	jsonvalue000 "github.com/Andrew-M-C/go.jsonvalue"
 	jsonvalue111 "github.com/Andrew-M-C/go.jsonvalue111"
 	jsonvalue133 "github.com/Andrew-M-C/go.jsonvalue133"
@@ -140,7 +141,7 @@ func jsonvalueUnmarshalTest() {
 	defer pprof.StopCPUProfile()
 
 	for i := 0; i < iteration; i++ {
-		_, err := jsonvalue133.Unmarshal(unmarshalText)
+		_, err := jsonvalue.Unmarshal(unmarshalText)
 		if err != nil {
 			printf("unmarshal error: %v", err)
 			return

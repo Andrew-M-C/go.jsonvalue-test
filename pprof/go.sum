@@ -5,6 +5,8 @@ github.com/Andrew-M-C/go.jsonvalue v1.3.3 h1:zPTwpjYwNmqHMyIWyES++xm4k5k1bkdtZoU
 github.com/Andrew-M-C/go.jsonvalue v1.3.3/go.mod h1:IwnJ6++SYu/lYAvrJCGGCd9WaT0zTcsD6Li1X9IHcSU=
 github.com/Andrew-M-C/go.jsonvalue v1.3.4-0.20230220091712-b2a6d94ad0a3 h1:CFSJOww2yfm/fDm4NsrPD5uah08HuRvN3r1w4j+brgU=
 github.com/Andrew-M-C/go.jsonvalue v1.3.4-0.20230220091712-b2a6d94ad0a3/go.mod h1:IwnJ6++SYu/lYAvrJCGGCd9WaT0zTcsD6Li1X9IHcSU=
+github.com/Andrew-M-C/go.jsonvalue v1.3.4 h1:VskZ2/ypZfegwDrL3YGW7CS5GSTIEDktbJoKG+QgfVk=
+github.com/Andrew-M-C/go.jsonvalue v1.3.4/go.mod h1:IwnJ6++SYu/lYAvrJCGGCd9WaT0zTcsD6Li1X9IHcSU=
 github.com/Andrew-M-C/go.util v0.0.0-20210428032903-565261b21288 h1:YpC10HEcQ2kAN0hHpsCKEz9x/gtWC4AuX9pQGhCWk3k=
 github.com/Andrew-M-C/go.util v0.0.0-20210428032903-565261b21288/go.mod h1:tSFc/0omeMwkI/p1rceBeQ/qWJu6GPSfdIiMaa3I4Pw=
 github.com/buger/jsonparser v0.0.0-20181115193947-bf1c66bbce23/go.mod h1:bbYlZJ7hK1yFx9hf58LP0zeX7UjIGs20ufpu3evjr+s=

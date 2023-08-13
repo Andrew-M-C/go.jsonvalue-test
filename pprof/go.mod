@@ -3,7 +3,7 @@ module github.com/Andrew-M-C/go.jsonvalue-test/pprof
 go 1.16
 
 require (
-	github.com/Andrew-M-C/go.jsonvalue v1.3.4-0.20230220091712-b2a6d94ad0a3
+	github.com/Andrew-M-C/go.jsonvalue v1.3.4
 	github.com/Andrew-M-C/go.jsonvalue111 v0.0.0-00010101000000-000000000000
 	github.com/Andrew-M-C/go.jsonvalue133 v0.0.0-00010101000000-000000000000
 	github.com/json-iterator/go v1.1.12
