@@ -14,12 +14,15 @@ import (
 	jsonparser "github.com/buger/jsonparser"
 	sonic "github.com/bytedance/sonic"
 	jsoniter "github.com/json-iterator/go"
+	ffjson "github.com/pquerna/ffjson/ffjson"
 )
 
 //go:generate go get -u github.com/buger/jsonparser
 //go:generate go get -u github.com/bytedance/sonic
 //go:generate go get -u github.com/json-iterator/go
 //go:generate go get -u github.com/mailru/easyjson
+//go:generate go get -u github.com/pquerna/ffjson/ffjson
+//go:generate go get -u github.com/Andrew-M-C/go.jsonvalue
 //go:generate go mod tidy
 //go:generate easyjson -all object.go
 //go:generate go test -bench=. -run=none -benchmem -benchtime=2s
@@ -56,10 +59,19 @@ func init() {
 	jsonvalue.SetDefaultMarshalOptions(jsonvalue.OptUTF8())
 }
 
+// MARK: 反序列化 - 结构体
+
 func Benchmark_Unmarshal_结构体_json(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		o := object{}
 		_ = json.Unmarshal(unmarshalText, &o)
+	}
+}
+
+func Benchmark_Unmarshal_结构体_ffjson(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		o := object{}
+		_ = ffjson.Unmarshal(unmarshalText, &o)
 	}
 }
 
@@ -91,6 +103,8 @@ func Benchmark_Unmarshal_结构体_jsoniter(b *testing.B) {
 	}
 }
 
+// MARK: 反序列化 - map[string]any
+
 func Benchmark_Unmarshal_map_any_json(b *testing.B) {
 	raw := unmarshalText
 	b.ResetTimer()
@@ -98,6 +112,16 @@ func Benchmark_Unmarshal_map_any_json(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		m := map[string]any{}
 		_ = json.Unmarshal(raw, &m)
+	}
+}
+
+func Benchmark_Unmarshal_map_any_ffjson(b *testing.B) {
+	raw := unmarshalText
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		m := map[string]any{}
+		_ = ffjson.Unmarshal(raw, &m)
 	}
 }
 
@@ -118,6 +142,8 @@ func Benchmark_Unmarshal_map_any_jsoniter(b *testing.B) {
 	}
 }
 
+// MARK: 反序列化 - map[string]any - 大数据量
+
 func Benchmark_Unmarshal_map_any_json_blob(b *testing.B) {
 	raw := generateLongObject()
 	b.ResetTimer()
@@ -125,6 +151,16 @@ func Benchmark_Unmarshal_map_any_json_blob(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		m := map[string]any{}
 		_ = json.Unmarshal(raw, &m)
+	}
+}
+
+func Benchmark_Unmarshal_map_any_ffjson_blob(b *testing.B) {
+	raw := generateLongObject()
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		m := map[string]any{}
+		_ = ffjson.Unmarshal(raw, &m)
 	}
 }
 
@@ -148,6 +184,8 @@ func Benchmark_Unmarshal_map_any_sonic_blob(b *testing.B) {
 	}
 }
 
+// MARK: 反序列化 - any
+
 func Benchmark_Unmarshal_any_json(b *testing.B) {
 	raw := unmarshalText
 	b.ResetTimer()
@@ -155,6 +193,16 @@ func Benchmark_Unmarshal_any_json(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var m any
 		_ = json.Unmarshal(raw, &m)
+	}
+}
+
+func Benchmark_Unmarshal_any_ffjson(b *testing.B) {
+	raw := unmarshalText
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		var m any
+		_ = ffjson.Unmarshal(raw, &m)
 	}
 }
 
@@ -167,6 +215,8 @@ func Benchmark_Unmarshal_any_sonic(b *testing.B) {
 		_ = sonic.Unmarshal(raw, &m)
 	}
 }
+
+// MARK: 反序列化 - jsonvalue
 
 func Benchmark_Unmarshal_Jsonvalue_v1_0_3(b *testing.B) {
 	origB := unmarshalText
@@ -203,6 +253,8 @@ func Benchmark_Unmarshal_Jsonvalue_latest(b *testing.B) {
 	}
 }
 
+// MARK: 序列化 - json
+
 func Benchmark__Marshal__map_any_json(b *testing.B) {
 	m := map[string]any{}
 	_ = json.Unmarshal(unmarshalText, &m)
@@ -231,6 +283,52 @@ func Benchmark__Marshal__结构体_json(b *testing.B) {
 	}
 }
 
+// MARK: 序列化 - ffjson
+
+func Benchmark__Marshal__map_any_ffjson(b *testing.B) {
+	m := map[string]any{}
+	_ = json.Unmarshal(unmarshalText, &m)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_, err := ffjson.Marshal(&m)
+		if err != nil {
+			b.Errorf("marshal error: %v", err)
+			return
+		}
+	}
+}
+
+func Benchmark__Marshal__结构体_ffjson(b *testing.B) {
+	o := object{}
+	_ = json.Unmarshal(unmarshalText, &o)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_, err := ffjson.Marshal(&o)
+		if err != nil {
+			b.Errorf("marshal error: %v", err)
+			return
+		}
+	}
+}
+
+// MARK: 序列化 - sonic
+
+func Benchmark__Marshal__map_any_sonic(b *testing.B) {
+	m := map[string]any{}
+	_ = json.Unmarshal(unmarshalText, &m)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_, err := sonic.Marshal(&m)
+		if err != nil {
+			b.Errorf("marshal error: %v", err)
+			return
+		}
+	}
+}
+
 func Benchmark__Marshal__结构体_sonic(b *testing.B) {
 	o := object{}
 	_ = sonic.Unmarshal(unmarshalText, &o)
@@ -238,6 +336,22 @@ func Benchmark__Marshal__结构体_sonic(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		_, err := sonic.Marshal(&o)
+		if err != nil {
+			b.Errorf("marshal error: %v", err)
+			return
+		}
+	}
+}
+
+// MARK: 序列化 - jsoniter
+
+func Benchmark__Marshal__map_any_jsoniter(b *testing.B) {
+	m := map[string]any{}
+	_ = json.Unmarshal(unmarshalText, &m)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_, err := jsonit.Marshal(&m)
 		if err != nil {
 			b.Errorf("marshal error: %v", err)
 			return
@@ -255,6 +369,8 @@ func Benchmark__Marshal__结构体_jsoniter(b *testing.B) {
 	}
 }
 
+// MARK: 序列化 - easyjson
+
 func Benchmark__Marshal__结构体_easyjson(b *testing.B) {
 	o := object{}
 	_ = o.UnmarshalJSON(unmarshalText)
@@ -264,6 +380,8 @@ func Benchmark__Marshal__结构体_easyjson(b *testing.B) {
 		_, _ = o.MarshalJSON()
 	}
 }
+
+// MARK: 序列化 - jsonvalue
 
 func Benchmark__Marshal__结构体_jsonvalue(b *testing.B) {
 	o := object{}
@@ -307,6 +425,8 @@ func Benchmark__Import___结构体_jsonvalue_sonic中转(b *testing.B) {
 		_, _ = jsonvalue133.UnmarshalNoCopy(b)
 	}
 }
+
+// MARK: 其他待整理
 
 func Benchmark__Marshal__Jsoniter_MapItf(b *testing.B) {
 	m := map[string]any{}

@@ -3,7 +3,7 @@ github.com/Andrew-M-C/go.jsonvalue v1.1.1 h1:OmaoZd9LvvUgmFu3qWk6S4yi6yZ4OkJrgMd
 github.com/Andrew-M-C/go.jsonvalue v1.1.1/go.mod h1:EOK7/BLd+rNb928lxQhLz29AS2871LMM0cpPVo+irU4=
 github.com/Andrew-M-C/go.jsonvalue v1.3.3 h1:zPTwpjYwNmqHMyIWyES++xm4k5k1bkdtZoU620pxjEc=
 github.com/Andrew-M-C/go.jsonvalue v1.3.3/go.mod h1:IwnJ6++SYu/lYAvrJCGGCd9WaT0zTcsD6Li1X9IHcSU=
-github.com/Andrew-M-C/go.jsonvalue v1.3.6 h1:mGrUAxm7evTlUnou2Kj6LF5iNa4VM3ERf5HsR9/+OJM=
+github.com/Andrew-M-C/go.jsonvalue v1.3.8 h1:hidBZ8hEZsLKEMYQD9v0AZ0zL6S8AZbG6ZHkGZHWGMA=
 github.com/Andrew-M-C/go.util v0.0.0-20210428032903-565261b21288 h1:YpC10HEcQ2kAN0hHpsCKEz9x/gtWC4AuX9pQGhCWk3k=
 github.com/Andrew-M-C/go.util v0.0.0-20210428032903-565261b21288/go.mod h1:tSFc/0omeMwkI/p1rceBeQ/qWJu6GPSfdIiMaa3I4Pw=
 github.com/buger/jsonparser v0.0.0-20181115193947-bf1c66bbce23/go.mod h1:bbYlZJ7hK1yFx9hf58LP0zeX7UjIGs20ufpu3evjr+s=
@@ -26,8 +26,8 @@ github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjY
 github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5/go.mod h1:jvVRKCrJTQWu0XVbaOlby/2lO20uSCHEMzzplHXte1o=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
-github.com/shopspring/decimal v1.3.1 h1:2Usl1nmF/WZucqkFZhnfFYxxxu8LG21F6nPQBE5gKV8=
 github.com/shopspring/decimal v1.3.1/go.mod h1:DKyhrW/HYNuLGql+MJL6WCR6knT2jwCFRcu2hWCYk4o=
+github.com/shopspring/decimal v1.4.0 h1:bxl37RwXBklmTi0C79JfXCEBD1cqqHt0bbgBAGFp81k=
 github.com/smarty/assertions v1.15.0 h1:cR//PqUBUiQRakZWqBiFFQ9wb8emQGDb0HeGdqGByCY=
 github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d/go.mod h1:OnSkiWE9lh6wB0YB77sQom3nweQdgAjqCqsofrRNTgc=
 github.com/smartystreets/assertions v1.2.0/go.mod h1:tcbTF8ujkAEcZ8TElKY+i30BzYlVhC/LOxJk7iOWnoo=
