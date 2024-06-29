@@ -14,7 +14,6 @@ import (
 	jsonparser "github.com/buger/jsonparser"
 	sonic "github.com/bytedance/sonic"
 	jsoniter "github.com/json-iterator/go"
-	ffjson "github.com/pquerna/ffjson/ffjson"
 )
 
 //go:generate go get -u github.com/buger/jsonparser
@@ -68,12 +67,12 @@ func Benchmark_Unmarshal_结构体_json(b *testing.B) {
 	}
 }
 
-func Benchmark_Unmarshal_结构体_ffjson(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		o := object{}
-		_ = ffjson.Unmarshal(unmarshalText, &o)
-	}
-}
+// func Benchmark_Unmarshal_结构体_ffjson(b *testing.B) {
+// 	for i := 0; i < b.N; i++ {
+// 		o := object{}
+// 		_ = ffjson.Unmarshal(unmarshalText, &o)
+// 	}
+// }
 
 func Benchmark_Unmarshal_结构体_sonic(b *testing.B) {
 	for i := 0; i < b.N; i++ {
@@ -115,15 +114,15 @@ func Benchmark_Unmarshal_map_any_json(b *testing.B) {
 	}
 }
 
-func Benchmark_Unmarshal_map_any_ffjson(b *testing.B) {
-	raw := unmarshalText
-	b.ResetTimer()
+// func Benchmark_Unmarshal_map_any_ffjson(b *testing.B) {
+// 	raw := unmarshalText
+// 	b.ResetTimer()
 
-	for i := 0; i < b.N; i++ {
-		m := map[string]any{}
-		_ = ffjson.Unmarshal(raw, &m)
-	}
-}
+// 	for i := 0; i < b.N; i++ {
+// 		m := map[string]any{}
+// 		_ = ffjson.Unmarshal(raw, &m)
+// 	}
+// }
 
 func Benchmark_Unmarshal_map_any_sonic(b *testing.B) {
 	raw := unmarshalText
@@ -154,15 +153,15 @@ func Benchmark_Unmarshal_map_any_json_blob(b *testing.B) {
 	}
 }
 
-func Benchmark_Unmarshal_map_any_ffjson_blob(b *testing.B) {
-	raw := generateLongObject()
-	b.ResetTimer()
+// func Benchmark_Unmarshal_map_any_ffjson_blob(b *testing.B) {
+// 	raw := generateLongObject()
+// 	b.ResetTimer()
 
-	for i := 0; i < b.N; i++ {
-		m := map[string]any{}
-		_ = ffjson.Unmarshal(raw, &m)
-	}
-}
+// 	for i := 0; i < b.N; i++ {
+// 		m := map[string]any{}
+// 		_ = ffjson.Unmarshal(raw, &m)
+// 	}
+// }
 
 func Benchmark_Unmarshal_map_any_jsoniter_blob(b *testing.B) {
 	raw := generateLongObject()
@@ -196,15 +195,15 @@ func Benchmark_Unmarshal_any_json(b *testing.B) {
 	}
 }
 
-func Benchmark_Unmarshal_any_ffjson(b *testing.B) {
-	raw := unmarshalText
-	b.ResetTimer()
+// func Benchmark_Unmarshal_any_ffjson(b *testing.B) {
+// 	raw := unmarshalText
+// 	b.ResetTimer()
 
-	for i := 0; i < b.N; i++ {
-		var m any
-		_ = ffjson.Unmarshal(raw, &m)
-	}
-}
+// 	for i := 0; i < b.N; i++ {
+// 		var m any
+// 		_ = ffjson.Unmarshal(raw, &m)
+// 	}
+// }
 
 func Benchmark_Unmarshal_any_sonic(b *testing.B) {
 	raw := unmarshalText
@@ -285,33 +284,33 @@ func Benchmark__Marshal__结构体_json(b *testing.B) {
 
 // MARK: 序列化 - ffjson
 
-func Benchmark__Marshal__map_any_ffjson(b *testing.B) {
-	m := map[string]any{}
-	_ = json.Unmarshal(unmarshalText, &m)
-	b.ResetTimer()
+// func Benchmark__Marshal__map_any_ffjson(b *testing.B) {
+// 	m := map[string]any{}
+// 	_ = json.Unmarshal(unmarshalText, &m)
+// 	b.ResetTimer()
 
-	for i := 0; i < b.N; i++ {
-		_, err := ffjson.Marshal(&m)
-		if err != nil {
-			b.Errorf("marshal error: %v", err)
-			return
-		}
-	}
-}
+// 	for i := 0; i < b.N; i++ {
+// 		_, err := ffjson.Marshal(&m)
+// 		if err != nil {
+// 			b.Errorf("marshal error: %v", err)
+// 			return
+// 		}
+// 	}
+// }
 
-func Benchmark__Marshal__结构体_ffjson(b *testing.B) {
-	o := object{}
-	_ = json.Unmarshal(unmarshalText, &o)
-	b.ResetTimer()
+// func Benchmark__Marshal__结构体_ffjson(b *testing.B) {
+// 	o := object{}
+// 	_ = json.Unmarshal(unmarshalText, &o)
+// 	b.ResetTimer()
 
-	for i := 0; i < b.N; i++ {
-		_, err := ffjson.Marshal(&o)
-		if err != nil {
-			b.Errorf("marshal error: %v", err)
-			return
-		}
-	}
-}
+// 	for i := 0; i < b.N; i++ {
+// 		_, err := ffjson.Marshal(&o)
+// 		if err != nil {
+// 			b.Errorf("marshal error: %v", err)
+// 			return
+// 		}
+// 	}
+// }
 
 // MARK: 序列化 - sonic
 
