@@ -3,30 +3,29 @@ module github.com/Andrew-M-C/go.jsonvalue-test/benchmark
 go 1.21
 
 require (
-	github.com/Andrew-M-C/go.jsonvalue v1.3.8
+	github.com/Andrew-M-C/go.jsonvalue v1.4.2-0.20241218025715-07c749a36313
 	github.com/Andrew-M-C/go.jsonvalue103 v0.0.0-00010101000000-000000000000
 	github.com/Andrew-M-C/go.jsonvalue105 v0.0.0-00010101000000-000000000000
 	github.com/Andrew-M-C/go.jsonvalue111 v0.0.0-00010101000000-000000000000
 	github.com/Andrew-M-C/go.jsonvalue133 v0.0.0-00010101000000-000000000000
 	github.com/buger/jsonparser v1.1.1
-	github.com/bytedance/sonic v1.11.9
+	github.com/bytedance/sonic v1.12.8
 	github.com/json-iterator/go v1.1.12
-	github.com/mailru/easyjson v0.7.7
+	github.com/mailru/easyjson v0.9.0
 )
 
 require (
-	github.com/bytedance/sonic/loader v0.1.1 // indirect
-	github.com/cloudwego/base64x v0.1.4 // indirect
-	github.com/cloudwego/iasm v0.2.0 // indirect
+	github.com/bytedance/sonic/loader v0.2.3 // indirect
+	github.com/cloudwego/base64x v0.1.5 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
-	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
+	github.com/klauspost/cpuid/v2 v2.2.9 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/smartystreets/goconvey v1.8.1 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
-	golang.org/x/arch v0.8.0 // indirect
-	golang.org/x/sys v0.21.0 // indirect
+	golang.org/x/arch v0.14.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
 )
 
 replace (
